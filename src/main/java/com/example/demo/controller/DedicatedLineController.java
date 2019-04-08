@@ -61,7 +61,7 @@ public class DedicatedLineController {
         return dedicatedLineService.updateDedicatedLine(dedicatedlineid,date,dedicatedlinedelete,dedicatedlinename,demoList);
     }
 
-    @GetMapping("/deleteDedicatedLineSingle")
+   /* @GetMapping("/deleteDedicatedLineSingle")
     @ApiOperation(value = "依据单个进行删除",notes = "删除专线则专线下的行程也将被删除")
     public Result deleteDedicatedLineSingle(Integer id){
         return dedicatedLineService.deleteDedicatedLineSingle(id);
@@ -70,5 +70,5 @@ public class DedicatedLineController {
     @ApiOperation(value = "依据list进行删除",notes = "删除专线则专线下的行程也将被删除")
     public Result deleteDedicatedLineList(String arr){
         return dedicatedLineService.deleteDedicatedLineList(arr);
-    }
+    }*/
 }

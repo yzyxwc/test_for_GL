@@ -63,7 +63,7 @@ public class TripController {
         return tripService.updateTripAll(id,name,delete,date);
     }
 
-    @GetMapping("/deleteTripSingle")
+    /*@GetMapping("/deleteTripSingle")
     @ApiOperation(value = "依据单个进行删除",notes = "删除专线则专线下的行程也将被删除")
     public Result deleteTripSingle(Integer id){
         return tripService.deleteTripSingle(id);
@@ -72,5 +72,5 @@ public class TripController {
     @ApiOperation(value = "依据list进行删除",notes = "删除专线则专线下的行程也将被删除")
     public Result deleteTripList(String arr){
         return tripService.deleteTripSingle(arr);
-    }
+    }*/
 }
