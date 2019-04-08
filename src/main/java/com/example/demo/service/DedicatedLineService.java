@@ -45,7 +45,7 @@ public class DedicatedLineService {
     }
     public Result addDedicatedLine(Date date, String name,List<Integer> tripallid,String tripName) {
         if(name == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         DedicatedLine dedicatedLineSingle=dedicatedLineMapper.getDedicatedLineByName(name);
         if(dedicatedLineSingle != null){
@@ -94,10 +94,10 @@ public class DedicatedLineService {
 
     public Result updateDedicatedLine(Integer dedicatedlineid, Date date, Integer dedicatedlinedelete, String dedicatedlinename, List<Integer> demoList) {
         if(dedicatedlinename == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         if(dedicatedlinedelete == null || (!dedicatedlinedelete.equals(1) && !dedicatedlinedelete.equals(0))){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         Integer dedicatedline=dedicatedLineMapper.updateDedicatedLineSingle(dedicatedlineid,date,dedicatedlinedelete,dedicatedlinename);
         if(!dedicatedline.equals(1)){
@@ -124,7 +124,7 @@ public class DedicatedLineService {
 //依据id进行逻辑删除
     public Result deleteDedicatedLineSingle(Integer id) {
         if(id == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         Integer dedicatedLineCount = dedicatedLineMapper.deleteDedicatedLineById(id);
         Integer tripCount = tripMapper.deletTripByDedicatedLineId(id);
@@ -146,7 +146,7 @@ public class DedicatedLineService {
                 }
             }
         }else{
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }

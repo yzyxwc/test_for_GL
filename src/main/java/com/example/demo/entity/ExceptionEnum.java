@@ -13,6 +13,7 @@ public enum ExceptionEnum {
     /**
      * 自定义错误信息
      */
+    DATA_ERR(206,"异常数据"),
     DATA_HAS_EXIST(205,"重复数据"),
     TWO_PASSWORD_NOT_EQ(103,"密码输入错误"),
     TWO_PASSWORD_IS_SAME(104,"新密码不能与旧密码一致"),

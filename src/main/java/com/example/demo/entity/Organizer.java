@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 组织者
- * ?是否一个订单对应一个组织者
+ * 一个订单对应一个组织者
  */
 @Data
 @NoArgsConstructor
@@ -15,4 +15,5 @@ public class Organizer {
    private Integer organizerid;
    private Integer organizerdelete;
    private String organizername;
+   private String organizerdescripe;
 }

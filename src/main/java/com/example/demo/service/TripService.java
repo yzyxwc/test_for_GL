@@ -61,10 +61,10 @@ public class TripService {
     //保留设计 select2插入dedicatedlineid
     public Result insertManyTrip(String name , Date date, String dedicatedlineid){
         if(name == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         if(date == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         TripAll tripall = tripAllMapper.getTripAllByName(name);
         if(tripall != null){
@@ -94,10 +94,10 @@ public class TripService {
 //修改行程
     public Result updateTripAll(Integer id, String name, Integer delete, Date date) {
         if(name == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         if(delete == null || (!delete.equals(1) && !delete.equals(0))){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         Integer updatetrip = tripMapper.updateSingleTrip(id,name,delete,date);
         if(!updatetrip.equals(1)){
@@ -108,7 +108,7 @@ public class TripService {
 
     public Result deleteTripSingle(Integer id) {
         if(id == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         Integer tripAllCount = tripAllMapper.deleteTripById(id);
         Integer tripCount = tripMapper.deleteTripByTripAllId(id);
@@ -130,7 +130,7 @@ public class TripService {
                 }
             }
         }else{
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }
