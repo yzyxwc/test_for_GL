@@ -112,7 +112,7 @@ public class TripService {
         }
         Integer tripAllCount = tripAllMapper.deleteTripById(id);
         Integer tripCount = tripMapper.deleteTripByTripAllId(id);
-        if(!tripAllCount.equals(1) || !tripCount.equals(1)){
+        if(!tripAllCount.equals(1) || tripCount == null || tripCount<0){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }

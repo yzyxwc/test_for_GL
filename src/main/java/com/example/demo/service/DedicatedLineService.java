@@ -23,6 +23,8 @@ public class DedicatedLineService {
     TripMapper tripMapper;
     @Autowired
     TripAllMapper tripAllMapper;
+    @Autowired
+    DedicatedLineService dedicatedLineService;
     public List<Trip> selectDedicatedLineById(Integer id){
         //依据专线id查询专线及该专线下的行程
         List<Trip> dedicatedLine=tripMapper.selectTripByDedicatedLineId(id);
@@ -126,7 +128,7 @@ public class DedicatedLineService {
         }
         Integer dedicatedLineCount = dedicatedLineMapper.deleteDedicatedLineById(id);
         Integer tripCount = tripMapper.deletTripByDedicatedLineId(id);
-        if(!dedicatedLineCount.equals(1) || !tripCount.equals(1)){
+        if(!dedicatedLineCount.equals(1) || tripCount == null || tripCount < 0){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
