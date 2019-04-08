@@ -119,7 +119,7 @@ public class TripService {
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }
 
-    public Result deleteTripSingle(String arr) {
+    public Result deleteTripList(String arr) {
         if(arr != null) {
             List<Integer> list = JSON.parseArray(arr,Integer.class);
             for (int i = 0; i < list.size(); i++) {

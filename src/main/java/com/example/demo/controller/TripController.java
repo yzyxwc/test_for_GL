@@ -71,6 +71,6 @@ public class TripController {
     @GetMapping("/deleteTripAllList")
     @ApiOperation(value = "依据list行程进行删除",notes = "删除行程则专线下的行程也将被删除")
     public Result deleteTripList(String arr){
-        return tripService.deleteTripSingle(arr);
+        return tripService.deleteTripList(arr);
     }
 }
