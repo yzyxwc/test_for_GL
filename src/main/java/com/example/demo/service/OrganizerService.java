@@ -5,13 +5,16 @@ import com.example.demo.entity.ExceptionEnum;
 import com.example.demo.entity.Organizer;
 import com.example.demo.entity.Result;
 import com.example.demo.mapper.OrganizerMapper;
+import com.example.demo.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class OrganizerService {
     @Autowired
     OrganizerMapper organizerMapper;
@@ -49,18 +52,8 @@ public class OrganizerService {
     }
     //名字和描述进行模糊搜索
     public List<Organizer> selectVagueOrganizerByNameAndDescripe(String name, String organizerdescripe){
-        String orgnizeName;
-        String descripe ;
-        if(name == null){
-            orgnizeName = "%%";
-        }else{
-            orgnizeName = "%"+name+"%";
-        }
-        if(organizerdescripe == null){
-            descripe = "%%";
-        }else{
-            descripe = "%"+organizerdescripe+"%";
-        }
+        String orgnizeName = StrUtil.formateVager(name);
+        String descripe = StrUtil.formateVager(organizerdescripe);
         return organizerMapper.selectVagueOrganizerByNameAndDescripe(orgnizeName,descripe);
     }
     //查询所有Organizer

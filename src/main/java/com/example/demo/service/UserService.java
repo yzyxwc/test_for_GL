@@ -7,8 +7,11 @@ import com.example.demo.mapper.UserMapper;
 import com.example.demo.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
+@Transactional
 public class UserService {
     @Autowired
     UserMapper userMapper;
@@ -54,6 +57,19 @@ public class UserService {
         user.setPassword(newPassword);
         Integer changpwd=userMapper.updateUser(user);
         if(!changpwd.equals(1)){
+            return Result.getResult(ExceptionEnum.OP_ERROR);
+        }
+        return Result.getResult(ExceptionEnum.OP_SUCCESS);
+    }
+    //注销登陆
+    public Result layout() {
+        User user = userMapper.getUserByToken(StrUtil.token);
+        if(user == null){
+            return Result.getResult(ExceptionEnum.OP_ERROR);
+        }
+        Integer layOutCount = userMapper.layout(user.getId());
+        if(!layOutCount.equals(1)){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);

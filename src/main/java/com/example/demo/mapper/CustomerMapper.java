@@ -53,11 +53,11 @@ public interface CustomerMapper {
 
     /**
      * 按照id进行删除
-     * @param idCard
+     * @param id
      * @return
      */
-    @Update("UPDATE customer SET  customerdelete = 1 WHERE customeridcard = #{idCard}")
-    Integer deleteCustomerById(Integer idCard);
+    @Update("UPDATE customer SET  customerdelete = 1 WHERE customerid = #{id}")
+    Integer deleteCustomerById(Integer id);
 
     /**
      * 按照id进行修改
@@ -70,7 +70,7 @@ public interface CustomerMapper {
      */
     @Update("UPDATE customer SET customerdate = #{date} , " +
             "customername = #{name} ,customeridcard = #{idCard} , " +
-            "customerdescripe = #{description} , customerdelete = #{delete}" +
+            "customerdescripe = #{description} , customerdelete = #{delete} " +
             "WHERE customerid = #{id}")
     Integer updateCustomerSingle(Integer id,Integer delete,Date date,String name,String idCard,String description);
 

@@ -13,5 +13,6 @@ public interface UserMapper {
     int updateUser(User user);
     @Select("select * from user where token = #{token}")
     User getUserByToken(String token);
-
+    @Update("update user set token = '' where id = #{id}")
+    Integer layout(Integer id);
 }

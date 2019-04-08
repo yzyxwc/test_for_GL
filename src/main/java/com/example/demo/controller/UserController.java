@@ -3,9 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.entity.Result;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import com.example.demo.util.StrUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +29,10 @@ public class UserController {
     public Result changePwd(String oldPassword, String newPassword,String confirmPassword){
         User user=userService.getUserByToken();
         return userService.changePwd(user,oldPassword,newPassword,confirmPassword);
+    }
+    @GetMapping("/layout")
+    @ApiOperation(value = "注销登陆",notes = "注销登陆")
+    public Result layout(){
+        return userService.layout();
     }
 }

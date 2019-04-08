@@ -5,6 +5,7 @@ import com.example.demo.entity.*;
 import com.example.demo.mapper.DedicatedLineMapper;
 import com.example.demo.mapper.TripAllMapper;
 import com.example.demo.mapper.TripMapper;
+import com.example.demo.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +39,11 @@ public class DedicatedLineService {
         return dedicatedLine;
     }
     //依据专线名模糊搜索专线
-    public DedicatedLine selectDedicatedLineVagueByName(String name) {
-        DedicatedLine dedicatedLine = dedicatedLineMapper.selectDedicatedLineVagueByName(name);
+    public DedicatedLine selectDedicatedLineVagueByName(String priname) {
+        String name = StrUtil.formateVager(priname);
+        return  dedicatedLineMapper.selectDedicatedLineVagueByName(name);
        // log.debug("按照name模糊查询专线name="+name+":",dedicatedLine);
-        return dedicatedLine;
+
     }
     public Result addDedicatedLine(Date date, String name,List<Integer> tripallid,String tripName) {
         if(name == null){

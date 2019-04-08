@@ -7,6 +7,7 @@ import com.example.demo.entity.Trip;
 import com.example.demo.entity.TripAll;
 import com.example.demo.mapper.TripAllMapper;
 import com.example.demo.mapper.TripMapper;
+import com.example.demo.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -34,7 +35,8 @@ public class TripService {
     }
 
     public List<Trip> getTripByVagueName(String name) {
-        List<Trip> trip = tripMapper.getTripByVagueName(name);
+        String afterName = StrUtil.formateVager(name);
+        List<Trip> trip = tripMapper.getTripByVagueName(afterName);
         //log.debug("按照name模糊查询行程:",trip);
         return trip;
     }

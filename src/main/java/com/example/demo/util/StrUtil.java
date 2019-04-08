@@ -30,4 +30,13 @@ public class StrUtil {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         return sdf.parse(str);
     }
+    public static String  formateVager(String name){
+        String afterName;
+        if(name == null){
+            afterName = "%%";
+        }else{
+            afterName = "%"+name+"%";
+        }
+        return  afterName;
+    }
 }
