@@ -1,10 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.entity.TripAll;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
 
@@ -20,4 +17,7 @@ public interface TripAllMapper {
     TripAll getTripAllByName(String name);
     @Update("UPDATE tripall set tripalldelete = 1 where tripallid = #{id}")
     Integer deleteTripById(Integer id);
+    @Insert("insert into tripall(tripallname,tripallcreatedate) values(#{tripallname},#{tripallcreatedate})")
+    @Options(useGeneratedKeys=true, keyProperty="tripallid", keyColumn="tripallid")
+    Integer insertObjectTrip(TripAll tripAll);
 }

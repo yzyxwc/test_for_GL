@@ -17,4 +17,9 @@ public class TripAll {
     private Date tripallcreatedate;
     private Boolean tripalldelete;
     private String tripallname;
+
+    public TripAll(String tripallname, Date tripallcreatedate) {
+        this.tripallcreatedate= tripallcreatedate;
+        this.tripallname = tripallname;
+    }
 }

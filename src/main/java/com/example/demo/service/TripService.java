@@ -41,55 +41,64 @@ public class TripService {
         return trip;
     }
     //一条一条的插入trip表
-    public Result insertSingleTrip(String name , Date date, Integer dedicatedlineid){
+    public Result insertSingleTrip(String tripallname , Date tripallcreatedate, Integer dedicatedlineid){
         //新增行程
-        Integer singleTripAll = tripAllMapper.insertSingleTrip(name,date);
+        TripAll tripAll = new TripAll(tripallname,tripallcreatedate);
+        Integer singleTripAll = tripAllMapper.insertObjectTrip(tripAll);
+        //Integer singleTripAll = tripAllMapper.insertSingleTrip(tripallname,tripallcreatedate);
         if(!singleTripAll.equals(1)){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
-        Integer tripallid=tripAllMapper.getTripAllByNameAndDate(name,date).getTripallid();
+        Integer tripallid=tripAll.getTripallid();
         Integer singleTrip = 0;
         if(dedicatedlineid != null){
-            singleTrip = tripMapper.insertSingleTrip(tripallid,date,dedicatedlineid);
+            singleTrip = tripMapper.insertSingleTrip(tripallid,tripallcreatedate,dedicatedlineid);
         }else{
-            singleTrip = tripMapper.insertSingleTripWithoutDedicated(tripallid,date);
+            singleTrip = tripMapper.insertSingleTripWithoutDedicated(tripallid,tripallcreatedate);
         }
 
         if(!singleTrip.equals(1)){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }
     //保留设计 select2插入dedicatedlineid
-    public Result insertManyTrip(String name , Date date, String dedicatedlineid){
-        if(name == null){
+    public Result insertManyTrip(String tripallname , Date tripallcreatedate, String dedicatedlineid){
+        if(tripallname == null){
             return Result.getResult(ExceptionEnum.DATA_ERR);
         }
-        if(date == null){
+        if(tripallcreatedate == null){
             return Result.getResult(ExceptionEnum.DATA_ERR);
         }
-        TripAll tripall = tripAllMapper.getTripAllByName(name);
+        TripAll tripall = tripAllMapper.getTripAllByName(tripallname);
         if(tripall != null){
             return Result.getResult(ExceptionEnum.DATA_HAS_EXIST);
         }
-        Integer addCount = tripAllMapper.insertSingleTrip(name,date);
-        if(!addCount.equals(1)){
+        TripAll tripAll = new TripAll(tripallname,tripallcreatedate);
+        Integer singleTripAll = tripAllMapper.insertObjectTrip(tripAll);
+        if(!singleTripAll.equals(1)){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
-        TripAll tripentity=tripAllMapper.getTripAllByName(name);
-        if(tripentity == null){
-            return Result.getResult(ExceptionEnum.OP_ERROR);
+        List<Integer> list = null;
+        try {
+            list = JSON.parseArray(dedicatedlineid, Integer.class);
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Result.getResult(ExceptionEnum.DATA_ERR);
         }
-        List<Integer> list= JSON.parseArray(dedicatedlineid,Integer.class);
         if(list != null && list.size() != 0){
             for (int i = 0; i < list.size(); i++) {
-                Integer insertTripAll = tripMapper.insertSingleTrip(tripentity.getTripallid(), date, list.get(i));
+                Integer insertTripAll = tripMapper.insertSingleTrip(tripAll.getTripallid(), tripallcreatedate, list.get(i));
                 if(!insertTripAll.equals(1)){
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     return Result.getResult(ExceptionEnum.OP_ERROR);
                 }
             }
         }else {
-            tripMapper.insertSingleTripWithoutDedicated(tripentity.getTripallid(),date);
+            tripMapper.insertSingleTripWithoutDedicated(tripAll.getTripallid(),tripallcreatedate);
         }
     return  Result.getResult(ExceptionEnum.OP_SUCCESS);
     }
