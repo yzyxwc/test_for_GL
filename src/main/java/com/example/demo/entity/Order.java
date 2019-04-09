@@ -18,12 +18,30 @@ public class Order {
     private Integer orderid;
     private Integer orderdelete;
     private Date orderdate;
-    private Integer ordertrip;
-    private Integer orderdedicatedline;
+    private TripAll ordertrip;
+    private Integer intordertrip;
+    private DedicatedLine orderdedicatedline;
+    private Integer intorderdedicatedline;
     private Integer orderpeoplecount;
     private BigDecimal directcustomerprice;
     private BigDecimal settlementprice;
     private BigDecimal orgernizerreturnpoint;
-    private Integer orgernizerid;
+    private Organizer orgernizerid;
+    private Integer intorgernizerid;
     private BigDecimal singleprofit;
+
+    public Order(Date orderdate, Integer intordertrip, Integer intorderdedicatedline,
+                 Integer orderpeoplecount, BigDecimal directcustomerprice, BigDecimal settlementprice, BigDecimal orgernizerreturnpoint,
+                 Integer intorgernizerid, BigDecimal singleprofit) {
+        this.orderid = orderid;
+        this.orderdate = orderdate;
+        this.intordertrip = intordertrip;
+        this.intorderdedicatedline = intorderdedicatedline;
+        this.orderpeoplecount = orderpeoplecount;
+        this.directcustomerprice = directcustomerprice;
+        this.settlementprice = settlementprice;
+        this.orgernizerreturnpoint = orgernizerreturnpoint;
+        this.intorgernizerid = intorgernizerid;
+        this.singleprofit = singleprofit;
+    }
 }

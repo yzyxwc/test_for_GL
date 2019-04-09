@@ -4,6 +4,7 @@ package com.example.demo.util;
 import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -38,5 +39,19 @@ public class StrUtil {
             afterName = "%"+name+"%";
         }
         return  afterName;
+    }
+    /*string转BigDecimal*/
+    public static BigDecimal stringToBigDecimal(String StrBd){
+        BigDecimal bigDecimal=new BigDecimal(StrBd);
+    //设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
+        bigDecimal=bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bigDecimal;
+    }
+
+    public static void main(String[] args) {
+        BigDecimal bignum1=new BigDecimal("10");
+        BigDecimal bignum2 = new BigDecimal("5");
+        BigDecimal bignum3 = new BigDecimal("6");
+        System.out.println((bignum1.subtract(bignum2.add(bignum3))).doubleValue());
     }
 }
