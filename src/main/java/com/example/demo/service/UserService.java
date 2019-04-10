@@ -57,6 +57,7 @@ public class UserService {
         user.setPassword(newPassword);
         Integer changpwd=userMapper.updateUser(user);
         if(!changpwd.equals(1)){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);

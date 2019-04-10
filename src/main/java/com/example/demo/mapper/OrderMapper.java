@@ -71,4 +71,13 @@ public interface OrderMapper {
                     one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
     })
     List<Order> getOrderVague(@Param("date") Date date, @Param("ordertripname") String ordertripname, @Param("dedicatedlinename") String dedicatedlinename, @Param("orderpeoplecountint")Integer orderpeoplecountint, @Param("orgernizername") String orgernizername);
+    @Update("UPDATE form SET orderdelete = 1 WHERE orderid = #{id}")
+    Integer deleteOrderById(Integer id);
+    @Update("UPDATE form SET orderdelete = #{orderdelete},orderdate = #{orderdate} ," +
+            "ordertrip =#{intordertrip} ,orderdedicatedline = #{intorderdedicatedline}," +
+            "orderpeoplecount = #{orderpeoplecount} , directcustomerprice = #{directcustomerprice} ," +
+            "settlementprice = #{settlementprice} , orgernizerreturnpoint = #{orgernizerreturnpoint} ," +
+            "orgernizerid =#{intorgernizerid} ,singleprofit =#{singleprofit} " +
+            "WHERE orderid = #{orderid}")
+    Integer updateOrderSingle(Order order);
 }
