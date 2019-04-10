@@ -17,6 +17,6 @@ public class CountService {
     OrderMapper orderMapper;
     public Result getProfitMonthToNow() {
         List<Order> listOrder = orderMapper.getOrderByMonth();
-
+        return null;
     }
 }
