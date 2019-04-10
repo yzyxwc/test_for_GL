@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 订单
@@ -29,6 +30,7 @@ public class Order {
     private Organizer orgernizerid;
     private Integer intorgernizerid;
     private BigDecimal singleprofit;
+    private List<Customer> customerList;
 
     public Order(Date orderdate, Integer intordertrip, Integer intorderdedicatedline,
                  Integer orderpeoplecount, BigDecimal directcustomerprice, BigDecimal settlementprice, BigDecimal orgernizerreturnpoint,

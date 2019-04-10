@@ -1,6 +1,7 @@
 package com.example.demo.util;
 
 
+import com.alibaba.fastjson.JSON;
 import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
@@ -10,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class StrUtil {
     private final static String key = "GUOLEI_NAME";
@@ -49,9 +51,8 @@ public class StrUtil {
     }
 
     public static void main(String[] args) {
-        BigDecimal bignum1=new BigDecimal("10");
-        BigDecimal bignum2 = new BigDecimal("5");
-        BigDecimal bignum3 = new BigDecimal("6");
-        System.out.println((bignum1.subtract(bignum2.add(bignum3))).doubleValue());
+        String s = null;
+        List<Integer> list= JSON.parseArray(s,Integer.class);
+        System.out.println(list == null);
     }
 }

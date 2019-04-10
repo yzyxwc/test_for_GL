@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo.entity.CustomerOrder;
 import com.example.demo.entity.ExceptionEnum;
 import com.example.demo.entity.Order;
 import com.example.demo.entity.Result;
+import com.example.demo.mapper.CustomerOrderMapper;
 import com.example.demo.mapper.OrderMapper;
 import com.example.demo.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import java.util.List;
 public class OrderService {
     @Autowired
     OrderMapper orderMapper;
+    @Autowired
+    CustomerOrderMapper customerOrderMapper;
     /*查询所有*/
     public List<Order> getOderList(){
         return orderMapper.getOrderList();
@@ -55,16 +59,24 @@ public class OrderService {
             }
             //计算出单人利润
             singleprofit = directcustomerprice.subtract(settlementprice.add(orgernizerreturnpoint));
-            Order order= new Order(orderdate,ordertrip,orderdedicatedline,list.size(),directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
+            Integer peopleCount = list ==null?0:list.size();
+            Order order= new Order(orderdate,ordertrip,orderdedicatedline,peopleCount,directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
             /*1.检查重复数据 2.生成该订单并返回id 3.插入customerorder*/
         Integer intOrderCount =  orderMapper.insertOrderObject(order);
-        //Integer intOrderCount =  orderMapper.insertOrderSingle(date,ordertrip,orderdedicatedline,list.size(),directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
         if(!intOrderCount.equals(1)){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
-        //打印的插入之后的id
-        System.out.println(order.getOrderid());
+        if(!peopleCount.equals(0)){
+            for (int i = 0; i < list.size(); i++) {
+                CustomerOrder customer = new CustomerOrder(list.get(i),order.getOrderid());
+                Integer count = customerOrderMapper.insertCustomerOrderSingle(customer);
+                if(!count.equals(1)){
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return Result.getResult(ExceptionEnum.OP_ERROR);
+                }
+            }
+        }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
 
     }
@@ -107,6 +119,13 @@ public class OrderService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
+        //删除该订单对应映射关系的客户
+        try{
+            customerOrderMapper.deleteCustomerOrderByOderId(id);
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Result.getResult(ExceptionEnum.OP_ERROR);
+        }
       return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }
 
@@ -136,12 +155,28 @@ public class OrderService {
         }
         //计算出单人利润
         singleprofit = directcustomerprice.subtract(settlementprice.add(orgernizerreturnpoint));
+        Integer peopleCount = list == null?0:list.size();
         Order order= new Order(orderid,delete,orderdate,ordertrip,orderdedicatedline,list.size(),directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
-
         Integer updaateCount = orderMapper.updateOrderSingle(order);
         if(!updaateCount.equals(1)){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
+        }
+        try{
+            customerOrderMapper.deleteCustomerOrderByOderId(orderid);
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Result.getResult(ExceptionEnum.OP_ERROR);
+        }
+        if(!peopleCount.equals(0)){
+            for (int i = 0; i < list.size(); i++) {
+                CustomerOrder customer = new CustomerOrder(list.get(i),order.getOrderid());
+                Integer count = customerOrderMapper.insertCustomerOrderSingle(customer);
+                if(!count.equals(1)){
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return Result.getResult(ExceptionEnum.OP_ERROR);
+                }
+            }
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }

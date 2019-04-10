@@ -40,6 +40,9 @@ public interface OrderMapper {
                     one = @One(select = "com.example.demo.mapper.DedicatedLineMapper.selectTripDedicatedLineById")),
             @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
                     one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
+            @Result(property = "orderid", column = "orderid"),
+            @Result(property = "customerList", column = "orderid", javaType = List.class,
+                    one = @One(select = "com.example.demo.mapper.CustomerOrderMapper.getCustemerByOderId")),
     })
 
     Order getOrderById(Integer id);
