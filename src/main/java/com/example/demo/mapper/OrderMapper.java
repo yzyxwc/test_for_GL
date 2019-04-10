@@ -32,6 +32,43 @@ public interface OrderMapper {
                     one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
     })
     List<Order> getOrderList();
+    @Select("SELECT * FROM form WHERE orderdelete = 0 AND orderid = #{id}")
+    @Results({
+            @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
+                    one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
+            @Result(property = "orderdedicatedline", column = "orderdedicatedline", javaType = DedicatedLine.class,
+                    one = @One(select = "com.example.demo.mapper.DedicatedLineMapper.selectTripDedicatedLineById")),
+            @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
+                    one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
+    })
 
+    Order getOrderById(Integer id);
 
+    @Select({"<script>",
+                    "SELECT * FROM form WHERE orderdelete = 0 ",
+                    "<when test='date!=null'>",
+                        "AND orderdate = #{date}",
+                    "</when><when test='orderpeoplecountint!=null'>",
+                        "AND orderpeoplecount = #{orderpeoplecountint}",
+                    "</when><when test='ordertripname!=\"%%\"'>",
+                        "AND ordertrip IN (SELECT tripallid FROM tripall WHERE tripalldelete = 0 AND tripallname LIKE #{ordertripname})",
+                    "</when><when test='dedicatedlinename!=\"%%\"'>",
+                        "AND orderdedicatedline IN (SELECT dedicatedlineid FROM " +
+                                "dedicatedline WHERE dedicatedlinedelete = 0 AND " +
+                                "dedicatedlinename LIKE #{dedicatedlinename})",
+                    "</when><when test='orgernizername!=\"%%\"'>",
+                        "AND orgernizerid IN ( SELECT organizerid FROM organizer WHERE " +
+                                "organizerdelete = 0 AND organizername LIKE " +
+                                "#{orgernizername})",
+                    "</when>",
+            "</script>"})
+    @Results({
+            @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
+                    one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
+            @Result(property = "orderdedicatedline", column = "orderdedicatedline", javaType = DedicatedLine.class,
+                    one = @One(select = "com.example.demo.mapper.DedicatedLineMapper.selectTripDedicatedLineById")),
+            @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
+                    one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
+    })
+    List<Order> getOrderVague(@Param("date") Date date, @Param("ordertripname") String ordertripname, @Param("dedicatedlinename") String dedicatedlinename, @Param("orderpeoplecountint")Integer orderpeoplecountint, @Param("orgernizername") String orgernizername);
 }

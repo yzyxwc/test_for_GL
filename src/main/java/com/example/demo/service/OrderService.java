@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -66,5 +67,30 @@ public class OrderService {
         System.out.println(order.getOrderid());
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
 
+    }
+    //获取id所对应的订单
+    public Result getOrderById(Integer id) {
+        if(id == null){
+            return Result.getResult(ExceptionEnum.DATA_ERR);
+        }
+        Order order = orderMapper.getOrderById(id);
+        if(null == order){
+            return Result.getResult(ExceptionEnum.NO_DATA);
+        }
+        return  Result.getResult(ExceptionEnum.OP_SUCCESS,order);
+    }
+//模糊搜索
+    public Result getOrderVague(String strDate, String ordertrip, String orderdedicatedline, Integer orderpeoplecountint, String orgernizer) {
+        Date date;
+        String ordertripname = StrUtil.formateVager(ordertrip);
+        String dedicatedlinename = StrUtil.formateVager(orderdedicatedline);
+        String orgernizername = StrUtil.formateVager(orgernizer);
+        try {
+            date = StrUtil.stringToDate(strDate);
+        }catch (Exception p){
+            date = null;
+        }
+        List<Order> list = orderMapper.getOrderVague(date,ordertripname,dedicatedlinename,orderpeoplecountint,orgernizername);
+        return Result.getResult(ExceptionEnum.OP_SUCCESS,list);
     }
 }
