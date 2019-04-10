@@ -156,7 +156,7 @@ public class OrderService {
         //计算出单人利润
         singleprofit = directcustomerprice.subtract(settlementprice.add(orgernizerreturnpoint));
         Integer peopleCount = list == null?0:list.size();
-        Order order= new Order(orderid,delete,orderdate,ordertrip,orderdedicatedline,list.size(),directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
+        Order order= new Order(orderid,delete,orderdate,ordertrip,orderdedicatedline,peopleCount,directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
         Integer updaateCount = orderMapper.updateOrderSingle(order);
         if(!updaateCount.equals(1)){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
