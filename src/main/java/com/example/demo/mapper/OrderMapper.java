@@ -83,4 +83,6 @@ public interface OrderMapper {
             "orgernizerid =#{intorgernizerid} ,singleprofit =#{singleprofit} " +
             "WHERE orderid = #{orderid}")
     Integer updateOrderSingle(Order order);
+
+    List<Order> getOrderByMonth();
 }
