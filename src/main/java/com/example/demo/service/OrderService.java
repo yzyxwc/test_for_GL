@@ -93,15 +93,13 @@ public class OrderService {
     }
 //模糊搜索
     public Result getOrderVague(String strDate, String ordertrip, String orderdedicatedline, Integer orderpeoplecountint, String orgernizer) {
-        Date date;
+        String date = "%%";
+        if(strDate != null && strDate != ""){
+            date = strDate;
+        }
         String ordertripname = StrUtil.formateVager(ordertrip);
         String dedicatedlinename = StrUtil.formateVager(orderdedicatedline);
         String orgernizername = StrUtil.formateVager(orgernizer);
-        try {
-            date = StrUtil.stringToDate(strDate);
-        }catch (Exception p){
-            date = null;
-        }
         List<Order> list = orderMapper.getOrderVague(date,ordertripname,dedicatedlinename,orderpeoplecountint,orgernizername);
         if(list == null || list.size() == 0){
             return Result.getResult(ExceptionEnum.NO_DATA);

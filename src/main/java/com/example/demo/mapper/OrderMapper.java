@@ -49,7 +49,7 @@ public interface OrderMapper {
 
     @Select({"<script>",
                     "SELECT * FROM form WHERE orderdelete = 0 ",
-                    "<when test='date!=null'>",
+                    "<when test='date!=\"%%\"'>",
                         "AND orderdate = #{date}",
                     "</when><when test='orderpeoplecountint!=null'>",
                         "AND orderpeoplecount = #{orderpeoplecountint}",
@@ -73,7 +73,7 @@ public interface OrderMapper {
             @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
                     one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
     })
-    List<Order> getOrderVague(@Param("date") Date date, @Param("ordertripname") String ordertripname, @Param("dedicatedlinename") String dedicatedlinename, @Param("orderpeoplecountint")Integer orderpeoplecountint, @Param("orgernizername") String orgernizername);
+    List<Order> getOrderVague(@Param("date") String date, @Param("ordertripname") String ordertripname, @Param("dedicatedlinename") String dedicatedlinename, @Param("orderpeoplecountint")Integer orderpeoplecountint, @Param("orgernizername") String orgernizername);
     @Update("UPDATE form SET orderdelete = 1 WHERE orderid = #{id}")
     Integer deleteOrderById(Integer id);
     @Update("UPDATE form SET orderdelete = #{orderdelete},orderdate = #{orderdate} ," +

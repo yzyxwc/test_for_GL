@@ -31,7 +31,7 @@ public class OrderController {
     public  Result getOrderById(@PathVariable("id") Integer id){
         return orderService.getOrderById(id);
     }
-    @GetMapping("/getOrderVague")
+    @PostMapping("/getOrderVague")
     @ApiOperation(value = "获取模糊订单",notes = "获取模糊的订单（创建时间，行程名，专线名，人数，组织者）")
     public  Result getOrderVague(String strDate, String ordertrip, String orderdedicatedline, Integer orderpeoplecountint, String orgernizer){
         return orderService.getOrderVague(strDate,ordertrip,orderdedicatedline,orderpeoplecountint,orgernizer);
