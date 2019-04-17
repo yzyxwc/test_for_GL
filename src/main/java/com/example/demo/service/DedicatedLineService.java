@@ -26,9 +26,9 @@ public class DedicatedLineService {
     TripAllMapper tripAllMapper;
     @Autowired
     DedicatedLineService dedicatedLineService;
-    public List<Trip> selectDedicatedLineById(Integer id){
+    public DedicatedLine selectDedicatedLineById(Integer id){
         //依据专线id查询专线及该专线下的行程
-        List<Trip> dedicatedLine=tripMapper.selectTripByDedicatedLineId(id);
+        DedicatedLine dedicatedLine=tripMapper.selectTripByDedicatedLineId(id);
         //log.debug("按照id查询专线id-"+id+":",dedicatedLine);
         return dedicatedLine;
     }

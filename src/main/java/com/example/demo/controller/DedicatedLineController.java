@@ -23,7 +23,7 @@ public class DedicatedLineController {
     DedicatedLineService dedicatedLineService;
     @GetMapping("/dedicatedLineById/{id}")
     @ApiOperation(value = "按照id获取专线及专线下的行程",notes = "按照id获取专线及专线下的行程")
-    public List<Trip> selectDedicatedLineById(@PathVariable("id") Integer id){
+    public DedicatedLine selectDedicatedLineById(@PathVariable("id") Integer id){
         return dedicatedLineService.selectDedicatedLineById(id);
     }
 

@@ -17,12 +17,14 @@ public interface TripMapper {
             @Result(property = "dedicatedlineid", column = "dedicatedlineid", javaType = DedicatedLine.class,jdbcType = JdbcType.INTEGER , one = @One(select = "com.example.demo.mapper.DedicatedLineMapper.selectTripDedicatedLineById"))
     })
     List<Trip> getAllTrip();
-    @Select("select * from trip where tripdelete=0 and dedicatedlineid = #{id}")
+    @Select("select * from dedicatedline where dedicatedlinedelete = 0 and dedicatedlineid = #{id}")
     @Results({
-            @Result(property = "tripallid", column = "tripallid", javaType = TripAll.class, one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
-            @Result(property = "dedicatedlineid", column = "dedicatedlineid", javaType = DedicatedLine.class, one = @One(select = "com.example.demo.mapper.DedicatedLineMapper.selectDedicatedLineById"))
+            @Result(property = "dedicatedlineid", column = "dedicatedlineid"),
+            @Result(property = "trip", column = "dedicatedlineid", javaType = List.class, many = @Many(select = "com.example.demo.mapper.TripMapper.getTripAllListByDedicatedlineId"))
     })
-    List<Trip> selectTripByDedicatedLineId(Integer id);
+    DedicatedLine selectTripByDedicatedLineId(Integer id);
+    @Select("SELECT * FROM tripall where tripalldelete = 0 AND tripallid IN (SELECT tripallid FROM trip WHERE tripdelete = 0 AND dedicatedlineid = #{id})")
+    List<TripAll> getTripAllListByDedicatedlineId(Integer id);
     @Select("select * from trip where tripdelete = 0 and tripallid=#{id} order by createdate desc")
     @Results({
             @Result(property = "tripallid", column = "tripallid", javaType = TripAll.class, one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
