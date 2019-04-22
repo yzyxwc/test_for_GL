@@ -30,7 +30,7 @@ public class OrderService {
         return orderMapper.getOrderList();
     }
     /*插入单条*/
-    public Result insertOrderSingle(String strDate, Integer ordertrip, Integer orderdedicatedline, String orderpeoplecountArr,
+    public Result insertOrderSingle(String strDate, Integer ordertrip, Integer orderdedicatedline,
                                     String strdirectcustomerprice, String strsettlementprice, String strorgernizerreturnpoint,
                                     Integer orgernizerid){
             if(strDate == null || ordertrip == null || orderdedicatedline == null ||
@@ -39,7 +39,6 @@ public class OrderService {
                 return Result.getResult(ExceptionEnum.DATA_ERR);
             }
             Date orderdate = null;
-            List<Integer> list;
             BigDecimal directcustomerprice;
             BigDecimal settlementprice;
             BigDecimal orgernizerreturnpoint;
@@ -47,7 +46,6 @@ public class OrderService {
             BigDecimal zero = new BigDecimal("0");
             try{
                 orderdate = StrUtil.stringToDate(strDate);
-                list = JSON.parseArray(orderpeoplecountArr,Integer.class);
                 directcustomerprice = StrUtil.stringToBigDecimal(strdirectcustomerprice);
                 settlementprice = StrUtil.stringToBigDecimal(strsettlementprice);
                 orgernizerreturnpoint = StrUtil.stringToBigDecimal(strorgernizerreturnpoint);
@@ -59,23 +57,12 @@ public class OrderService {
             }
             //计算出单人利润
             singleprofit = directcustomerprice.subtract(settlementprice.add(orgernizerreturnpoint));
-            Integer peopleCount = list ==null?0:list.size();
-            Order order= new Order(orderdate,ordertrip,orderdedicatedline,peopleCount,directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
+            Order order= new Order(orderdate,ordertrip,orderdedicatedline,directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
             /*1.检查重复数据 2.生成该订单并返回id 3.插入customerorder*/
         Integer intOrderCount =  orderMapper.insertOrderObject(order);
         if(!intOrderCount.equals(1)){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
-        }
-        if(!peopleCount.equals(0)){
-            for (int i = 0; i < list.size(); i++) {
-                CustomerOrder customer = new CustomerOrder(list.get(i),order.getOrderid());
-                Integer count = customerOrderMapper.insertCustomerOrderSingle(customer);
-                if(!count.equals(1)){
-                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    return Result.getResult(ExceptionEnum.OP_ERROR);
-                }
-            }
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
 
@@ -127,7 +114,7 @@ public class OrderService {
       return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }
 
-    public Result updateOrderSingle(Integer orderid,Integer delete, String strDate, Integer ordertrip, Integer orderdedicatedline, String orderpeoplecountArr, String strdirectcustomerprice, String strsettlementprice, String strorgernizerreturnpoint, Integer orgernizerid) {
+    public Result updateOrderSingle(Integer orderid,Integer delete, String strDate, Integer ordertrip, Integer orderdedicatedline, String strdirectcustomerprice, String strsettlementprice, String strorgernizerreturnpoint, Integer orgernizerid) {
         if(delete.equals(-1) || strDate == null || ordertrip == null || orderdedicatedline == null ||
                 strdirectcustomerprice == null || strsettlementprice == null ||
                 strorgernizerreturnpoint == null || orgernizerid == null){
@@ -141,7 +128,6 @@ public class OrderService {
         BigDecimal singleprofit;
         try{
             orderdate = StrUtil.stringToDate(strDate);
-            list = JSON.parseArray(orderpeoplecountArr,Integer.class);
             directcustomerprice = StrUtil.stringToBigDecimal(strdirectcustomerprice);
             settlementprice = StrUtil.stringToBigDecimal(strsettlementprice);
             orgernizerreturnpoint = StrUtil.stringToBigDecimal(strorgernizerreturnpoint);
@@ -153,28 +139,11 @@ public class OrderService {
         }
         //计算出单人利润
         singleprofit = directcustomerprice.subtract(settlementprice.add(orgernizerreturnpoint));
-        Integer peopleCount = list == null?0:list.size();
-        Order order= new Order(orderid,delete,orderdate,ordertrip,orderdedicatedline,peopleCount,directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
+        Order order= new Order(orderid,delete,orderdate,ordertrip,orderdedicatedline,directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit);
         Integer updaateCount = orderMapper.updateOrderSingle(order);
         if(!updaateCount.equals(1)){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.getResult(ExceptionEnum.OP_ERROR);
-        }
-        try{
-            customerOrderMapper.deleteCustomerOrderByOderId(orderid);
-        }catch (Exception e){
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return Result.getResult(ExceptionEnum.OP_ERROR);
-        }
-        if(!peopleCount.equals(0)){
-            for (int i = 0; i < list.size(); i++) {
-                CustomerOrder customer = new CustomerOrder(list.get(i),order.getOrderid());
-                Integer count = customerOrderMapper.insertCustomerOrderSingle(customer);
-                if(!count.equals(1)){
-                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    return Result.getResult(ExceptionEnum.OP_ERROR);
-                }
-            }
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }

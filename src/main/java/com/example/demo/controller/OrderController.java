@@ -20,10 +20,10 @@ public class OrderController {
     }
     @PostMapping("/insertOrderSingle")
     @ApiOperation(value = "插入单条订单",notes = "插入单条订单")
-    public Result insertOrderSingle(String strDate, Integer ordertrip, Integer orderdedicatedline, String orderpeoplecountArr,
+    public Result insertOrderSingle(String strDate, Integer ordertrip, Integer orderdedicatedline,
                                             String strdirectcustomerprice, String strsettlementprice, String strorgernizerreturnpoint,
                                             Integer orgernizerid){
-        return orderService.insertOrderSingle(strDate,ordertrip,orderdedicatedline,orderpeoplecountArr,
+        return orderService.insertOrderSingle(strDate,ordertrip,orderdedicatedline,
                 strdirectcustomerprice,strsettlementprice,strorgernizerreturnpoint,orgernizerid);
     }
     @GetMapping("/getOrderById/{id}")
@@ -43,10 +43,10 @@ public class OrderController {
     }
     @PostMapping("/updateOrderSingle")
     @ApiOperation(value = "修改单条订单",notes = "修改单条订单")
-    public Result updateOrderSingle(Integer orderid,Integer delete,String strDate, Integer ordertrip, Integer orderdedicatedline, String orderpeoplecountArr,
-                                    String strdirectcustomerprice, String strsettlementprice, String strorgernizerreturnpoint,
-                                    Integer orgernizerid){
-        return orderService.updateOrderSingle(orderid,delete,strDate,ordertrip,orderdedicatedline,orderpeoplecountArr,strdirectcustomerprice,strsettlementprice,strorgernizerreturnpoint,orgernizerid);
+    public Result updateOrderSingle(Integer orderid,Integer orderdelete,String orderdate, Integer tripallid, Integer dedicatedlineid,
+                                    String directcustomerprice, String settlementprice, String orgernizerreturnpoint,
+                                    Integer organizerid){
+        return orderService.updateOrderSingle(orderid,orderdelete,orderdate,tripallid,dedicatedlineid,directcustomerprice,settlementprice,orgernizerreturnpoint,organizerid);
 
     }
 }

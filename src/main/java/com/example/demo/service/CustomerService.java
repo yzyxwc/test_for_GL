@@ -124,4 +124,8 @@ public class CustomerService {
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
     }
+
+    public List<Customer> getCustomerList() {
+        return customerMapper.getCustomerList();
+    }
 }

@@ -19,10 +19,10 @@ public interface OrderMapper {
                               BigDecimal directcustomerprice,BigDecimal settlementprice,BigDecimal orgernizerreturnpoint,
                               Integer orgernizerid,BigDecimal singleprofit);
     @Insert("INSERT INTO form(orderdate,ordertrip,orderdedicatedline,orderpeoplecount,directcustomerprice,settlementprice,orgernizerreturnpoint,orgernizerid,singleprofit)" +
-            "VALUES(#{orderdate},#{intordertrip},#{intorderdedicatedline},#{orderpeoplecount},#{directcustomerprice},#{settlementprice},#{orgernizerreturnpoint},#{intorgernizerid} ,#{singleprofit})")
+            "VALUES(#{orderdate},#{intordertrip},#{intorderdedicatedline},0,#{directcustomerprice},#{settlementprice},#{orgernizerreturnpoint},#{intorgernizerid} ,#{singleprofit})")
     @Options(useGeneratedKeys=true, keyProperty="orderid", keyColumn="orderid")
     Integer insertOrderObject(Order order);
-    @Select("SELECT * FROM form WHERE orderdelete = 0")
+    @Select("SELECT * FROM form WHERE orderdelete = 0 order by orderid desc")
     @Results({
             @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
                     one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
@@ -64,6 +64,7 @@ public interface OrderMapper {
                                 "organizerdelete = 0 AND organizername LIKE " +
                                 "#{orgernizername})",
                     "</when>",
+            "order by orderid desc",
             "</script>"})
     @Results({
             @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
@@ -78,7 +79,7 @@ public interface OrderMapper {
     Integer deleteOrderById(Integer id);
     @Update("UPDATE form SET orderdelete = #{orderdelete},orderdate = #{orderdate} ," +
             "ordertrip =#{intordertrip} ,orderdedicatedline = #{intorderdedicatedline}," +
-            "orderpeoplecount = #{orderpeoplecount} , directcustomerprice = #{directcustomerprice} ," +
+            " directcustomerprice = #{directcustomerprice} ," +
             "settlementprice = #{settlementprice} , orgernizerreturnpoint = #{orgernizerreturnpoint} ," +
             "orgernizerid =#{intorgernizerid} ,singleprofit =#{singleprofit} " +
             "WHERE orderid = #{orderid}")

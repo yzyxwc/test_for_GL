@@ -73,5 +73,6 @@ public interface CustomerMapper {
             "customerdescripe = #{description} , customerdelete = #{delete} " +
             "WHERE customerid = #{id}")
     Integer updateCustomerSingle(Integer id,Integer delete,Date date,String name,String idCard,String description);
-
+    @Select("SELECT * FROM customer WHERE customerdelete = 0")
+    List<Customer> getCustomerList();
 }

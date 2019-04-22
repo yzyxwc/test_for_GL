@@ -20,6 +20,11 @@ public class CustomerController {
     public Result insertCustomerSingle(String strDate, String name, String card, String description){
         return customerService.insertCustomerSingle(strDate,name,card,description);
     }
+    @GetMapping("getCustomerList")
+    @ApiOperation(value = "查询所有Customer",notes = "查询所有Customer")
+    public List<Customer> getCustomerList(){
+        return customerService.getCustomerList();
+    }
     @GetMapping("getCustomerById")
     @ApiOperation(value = "按照id查询单条Customer",notes = "按照id查询单条Customer")
     public Customer getCustomerById(Integer id){
