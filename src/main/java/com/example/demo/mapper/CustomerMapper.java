@@ -48,7 +48,17 @@ public interface CustomerMapper {
      * @param descripe
      * @return
      */
-    @Select("SELECT * FROM customer WHERE customerdelete = 0 AND customername LIKE #{name} AND customeridcard LIKE #{idCard} AND customerdescripe LIKE #{descripe}")
+    @Select({"<script>",
+            "SELECT * FROM customer WHERE customerdelete = 0 ",
+            "<when test='name!=\"%%\"'>",
+            "AND customername LIKE #{name}",
+            "</when><when test='idCard!=\"%%\"'>",
+            " AND customeridcard LIKE #{idCard}",
+            "</when><when test='descripe!=\"%%\"'>",
+            "AND customerdescripe LIKE #{descripe} ",
+            "</when>",
+            "order by customerid desc",
+            "</script>"})
     List<Customer> getCustomerByNameOrIdCardOrDescripe(String name, String idCard, String descripe);
 
     /**
@@ -73,6 +83,6 @@ public interface CustomerMapper {
             "customerdescripe = #{description} , customerdelete = #{delete} " +
             "WHERE customerid = #{id}")
     Integer updateCustomerSingle(Integer id,Integer delete,Date date,String name,String idCard,String description);
-    @Select("SELECT * FROM customer WHERE customerdelete = 0")
+    @Select("SELECT * FROM customer WHERE customerdelete = 0 order by customerid desc")
     List<Customer> getCustomerList();
 }

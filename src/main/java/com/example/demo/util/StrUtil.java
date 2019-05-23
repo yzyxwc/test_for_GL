@@ -2,6 +2,7 @@ package com.example.demo.util;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
@@ -49,10 +50,26 @@ public class StrUtil {
         bigDecimal=bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
         return bigDecimal;
     }
+    public static Boolean verifMonth(Integer month){
+       if(month != null && month >0 && month < 13){
+            return true;
+       }
+       return  false;
+    }
 
     public static void main(String[] args) {
         String s = null;
         List<Integer> list= JSON.parseArray(s,Integer.class);
         System.out.println(list == null);
+    }
+
+    public static List<String> getPeridTime(String yearMonth) {
+        List<String> list = Lists.newArrayList();
+        String start = yearMonth+"-01";
+        String end = yearMonth+"-31";
+        list.add(start);
+        list.add(end);
+        return list;
+
     }
 }

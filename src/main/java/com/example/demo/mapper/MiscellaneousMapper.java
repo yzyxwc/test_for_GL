@@ -1,10 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.entity.Miscellaneous;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -15,6 +12,8 @@ public interface MiscellaneousMapper {
     Integer insertMiscellaneousSingle(Miscellaneous miscellaneous);
     @Select("SELECT * FROM miscellaneous WHERE miscellaneousdelete = 0")
     List<Miscellaneous> getAllMiscellaneous();
+    @Select("SELECT * from miscellaneous where createdate BETWEEN #{start} and #{end}")
+    List<Miscellaneous> getAllMiscellaneousByMonth(@Param("start") String start , @Param("end") String end);
     @Select("SELECT * FROM miscellaneous WHERE miscellaneousdelete = 0 " +
             "AND miscellaneousid = #{id}")
     Miscellaneous   getAllMiscellaneousById(Integer id);

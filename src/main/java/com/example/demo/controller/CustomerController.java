@@ -47,7 +47,7 @@ public class CustomerController {
     }
     @PostMapping("updateCustomerSingle")
     @ApiOperation(value = "修改单条Customer",notes = "修改单条Customer")
-    public Result updateCustomerSingle(Integer id,Integer delete,String strDate,String name,String idCard,String description){
-        return customerService.updateCustomerSingle(id,delete,strDate,name,idCard,description);
+    public Result updateCustomerSingle(Integer customerid,Integer customerdelete,String customerdate,String customername,String customeridcard,String customerdescripe){
+        return customerService.updateCustomerSingle(customerid,customerdelete,customerdate,customername,customeridcard,customerdescripe);
     }
 }
