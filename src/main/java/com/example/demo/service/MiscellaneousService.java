@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -93,5 +94,15 @@ public class MiscellaneousService {
             return Result.getResult(ExceptionEnum.OP_ERROR);
         }
         return Result.getResult(ExceptionEnum.OP_SUCCESS);
+    }
+
+    public Result findMiscellaneousVague(String month) {
+        if(null == month){
+            month = LocalDateTime.now().getYear()+"-"+LocalDateTime.now().getMonthValue();
+        }
+
+        List<String> list = StrUtil.getPeridTime(month);
+        List<Miscellaneous> allMiscellaneousByMonth = miscellaneousMapper.getAllMiscellaneousByMonth(list.get(0), list.get(1));
+        return Result.getResult(allMiscellaneousByMonth);
     }
 }

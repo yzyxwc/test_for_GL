@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 /**
  * 返回数据形式
  */
@@ -16,6 +19,14 @@ public class Result {
     int code;
     String msg;
     Object data;
+    Integer total;
+
+    public Result(int code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
     public static Result getResult(){
         return getResult(ExceptionEnum.OP_ERROR);
     }
@@ -62,5 +73,19 @@ public class Result {
     }
     public static Result success(Object obj){
         return getResult(ExceptionEnum.OP_SUCCESS,obj);
+    }
+
+    public static Result getResult(ExceptionEnum code,Object data, int size) {
+        String msg = code.getMsg();
+        Result result = new Result();
+        if(!StrUtil.isEmpty(msg)){
+            result.setCode(code.getCode());
+            result.setMsg(msg);
+            result.setTotal(size);
+        }
+        if (data != null){
+            result.setData(data);
+        }
+        return result;
     }
 }

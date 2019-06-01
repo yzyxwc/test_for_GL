@@ -22,7 +22,7 @@ public interface OrderMapper {
             "VALUES(#{orderdate},#{intordertrip},#{intorderdedicatedline},0,#{directcustomerprice},#{settlementprice},#{orgernizerreturnpoint},#{intorgernizerid} ,#{singleprofit})")
     @Options(useGeneratedKeys=true, keyProperty="orderid", keyColumn="orderid")
     Integer insertOrderObject(Order order);
-    @Select("SELECT * FROM form WHERE orderdelete = 0 order by orderid desc")
+    @Select("SELECT * FROM form WHERE orderdelete = 0 order by orderid desc limit #{start},#{size}")
     @Results({
             @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
                     one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
@@ -31,7 +31,7 @@ public interface OrderMapper {
             @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
                     one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
     })
-    List<Order> getOrderList();
+    List<Order> getOrderList(Integer start,Integer size);
     @Select("SELECT * FROM form WHERE orderdelete = 0 AND orderid = #{id}")
     @Results({
             @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
@@ -74,7 +74,47 @@ public interface OrderMapper {
             @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
                     one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
     })
-    List<Order> getOrderVague(@Param("date") String date, @Param("ordertripname") String ordertripname, @Param("dedicatedlinename") String dedicatedlinename, @Param("orderpeoplecountint")Integer orderpeoplecountint, @Param("orgernizername") String orgernizername);
+    List<Order> getOrderVague(@Param("date") String date, @Param("ordertripname") String ordertripname,
+                              @Param("dedicatedlinename") String dedicatedlinename,
+                              @Param("orderpeoplecountint")Integer orderpeoplecountint,
+                              @Param("orgernizername") String orgernizername);
+
+
+    @Select({"<script>",
+            "SELECT * FROM form WHERE orderdelete = 0 ",
+            "<when test='date!=\"%%\"'>",
+            "AND orderdate = #{date}",
+            "</when><when test='orderpeoplecountint!=null'>",
+            "AND orderpeoplecount = #{orderpeoplecountint}",
+            "</when><when test='ordertripname!=\"%%\"'>",
+            "AND ordertrip IN (SELECT tripallid FROM tripall WHERE tripalldelete = 0 AND tripallname LIKE #{ordertripname})",
+            "</when><when test='dedicatedlinename!=\"%%\"'>",
+            "AND orderdedicatedline IN (SELECT dedicatedlineid FROM " +
+                    "dedicatedline WHERE dedicatedlinedelete = 0 AND " +
+                    "dedicatedlinename LIKE #{dedicatedlinename})",
+            "</when><when test='orgernizername!=\"%%\"'>",
+            "AND orgernizerid IN ( SELECT organizerid FROM organizer WHERE " +
+                    "organizerdelete = 0 AND organizername LIKE " +
+                    "#{orgernizername})",
+            "</when>",
+            "order by orderid desc limit #{start},#{size}",
+            "</script>"})
+    @Results({
+            @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
+                    one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
+            @Result(property = "orderdedicatedline", column = "orderdedicatedline", javaType = DedicatedLine.class,
+                    one = @One(select = "com.example.demo.mapper.DedicatedLineMapper.selectTripDedicatedLineById")),
+            @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
+                    one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
+    })
+    List<Order> getOrderVagueList(@Param("date") String date, @Param("ordertripname") String ordertripname,
+                              @Param("dedicatedlinename") String dedicatedlinename,
+                              @Param("orderpeoplecountint")Integer orderpeoplecountint,
+                              @Param("orgernizername") String orgernizername,
+                              @Param("size") Integer size,
+                              @Param("start") Integer start);
+
+
     @Update("UPDATE form SET orderdelete = 1 WHERE orderid = #{id}")
     Integer deleteOrderById(Integer id);
     @Update("UPDATE form SET orderdelete = #{orderdelete},orderdate = #{orderdate} ," +
@@ -86,4 +126,15 @@ public interface OrderMapper {
     Integer updateOrderSingle(Order order);
     @Select("SELECT * from form where orderdate BETWEEN #{start} and #{end}")
     List<Order> getOrderByMonth(@Param("start") String start , @Param("end") String end);
+
+    @Select("SELECT * FROM form WHERE orderdelete = 0 order by orderid desc")
+    @Results({
+            @Result(property = "ordertrip", column = "ordertrip", javaType = TripAll.class,
+                    one = @One(select = "com.example.demo.mapper.TripAllMapper.getTripAllById")),
+            @Result(property = "orderdedicatedline", column = "orderdedicatedline", javaType = DedicatedLine.class,
+                    one = @One(select = "com.example.demo.mapper.DedicatedLineMapper.selectTripDedicatedLineById")),
+            @Result(property = "orgernizerid", column = "orgernizerid", javaType = Organizer.class,
+                    one = @One(select = "com.example.demo.mapper.OrganizerMapper.selectOrganizerById")),
+    })
+    List<Order> findAll();
 }

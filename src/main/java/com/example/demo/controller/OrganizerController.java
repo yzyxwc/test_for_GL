@@ -30,18 +30,18 @@ public class OrganizerController {
     }
     @PostMapping("/selectVagueOrganizerByNameAndDescripe")
     @ApiOperation(value = "模糊查询组织者",notes = "模糊查询组织者")
-    public List<Organizer> selectVagueOrganizerByNameAndDescripe(String name, String organizerdescripe){
-        return organizerService.selectVagueOrganizerByNameAndDescripe(name,organizerdescripe);
+    public Result selectVagueOrganizerByNameAndDescripe(String name, String organizerdescripe,Integer page, Integer size){
+        return organizerService.selectVagueOrganizerByNameAndDescripe(name,organizerdescripe,page-1,size);
     }
     @PostMapping("/selectAllOrganizer")
     @ApiOperation(value = "查询所有组织者",notes = "查询所有组织者")
-    public List<Organizer> selectAllOrganizer(){
-        return organizerService.selectAllOrganizer();
+    public Result selectAllOrganizer(Integer page, Integer size){
+        return organizerService.selectAllOrganizer(page-1,size);
     }
     @PostMapping("/updateOrganizerById")
     @ApiOperation(value = "id修改组织者",notes = "id修改组织者")
-    public Result updateOrganizerById(Integer id,Integer delete,String name, String organizerdescripe){
-        return organizerService.updateOrganizerById(id,delete,name,organizerdescripe);
+    public Result updateOrganizerById(Integer organizerid,Integer organizerdelete,String organizername, String organizerdescripe){
+        return organizerService.updateOrganizerById(organizerid,organizerdelete,organizername,organizerdescripe);
     }
     @PostMapping("/deleteOrgernizerById")
     @ApiOperation(value = "id删除组织者",notes = "id删除组织者")

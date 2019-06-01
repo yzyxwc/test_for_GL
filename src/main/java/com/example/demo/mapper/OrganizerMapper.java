@@ -40,4 +40,10 @@ public interface OrganizerMapper {
     Integer updateOrganizerById(Integer id,Integer delete,String name, String organizerdescripe);
     @Update("UPDATE organizer SET organizerdelete = 1 WHERE  organizerid=#{id}")
     Integer deleteorgernizerById(Integer id);
+    @Select("SELECT * FROM organizer WHERE organizerdelete = 0 limit #{start},#{size}")
+    List<Organizer> selectAllOrganizerList(int start, Integer size);
+    @Select("SELECT * FROM organizer " +
+            "WHERE organizername LIKE #{orgnizeName} " +
+            "AND organizerdescripe LIKE #{descripe} AND organizerdelete = 0 limit #{start},#{size}")
+    List<Organizer> selectVagueOrganizerByNameAndDescripeList(String orgnizeName, String descripe, int start, Integer size);
 }

@@ -15,8 +15,8 @@ public class OrderController {
     OrderService orderService;
     @GetMapping("/getOrderList")
     @ApiOperation(value = "获取所有订单",notes = "获取所有订单")
-    public  List<Order> getOrderList(){
-        return orderService.getOderList();
+    public  Result getOrderList(Integer size,Integer page){
+        return orderService.getOderList(size,page-1);
     }
     @PostMapping("/insertOrderSingle")
     @ApiOperation(value = "插入单条订单",notes = "插入单条订单")
@@ -33,8 +33,9 @@ public class OrderController {
     }
     @PostMapping("/getOrderVague")
     @ApiOperation(value = "获取模糊订单",notes = "获取模糊的订单（创建时间，行程名，专线名，人数，组织者）")
-    public  Result getOrderVague(String strDate, String ordertrip, String orderdedicatedline, Integer orderpeoplecountint, String orgernizer){
-        return orderService.getOrderVague(strDate,ordertrip,orderdedicatedline,orderpeoplecountint,orgernizer);
+    public  Result getOrderVague(String strDate, String ordertrip, String orderdedicatedline, Integer orderpeoplecountint,
+                                 String orgernizer,Integer size,Integer page){
+        return orderService.getOrderVague(strDate,ordertrip,orderdedicatedline,orderpeoplecountint,orgernizer,page-1,size);
     }
     @DeleteMapping("/deleteOrderById/{id}")
     @ApiOperation(value = "订单按照id进行删除",notes = "订单按照id进行删除")

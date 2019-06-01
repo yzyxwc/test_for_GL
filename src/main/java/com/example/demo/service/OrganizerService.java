@@ -51,15 +51,18 @@ public class OrganizerService {
         return organizer;
     }
     //名字和描述进行模糊搜索
-    public List<Organizer> selectVagueOrganizerByNameAndDescripe(String name, String organizerdescripe){
+    public Result selectVagueOrganizerByNameAndDescripe(String name, String organizerdescripe, int page, Integer size){
         String orgnizeName = StrUtil.formateVager(name);
         String descripe = StrUtil.formateVager(organizerdescripe);
-        return organizerMapper.selectVagueOrganizerByNameAndDescripe(orgnizeName,descripe);
+        int total = organizerMapper.selectVagueOrganizerByNameAndDescripe(orgnizeName, descripe).size();
+        List<Organizer> organizers = organizerMapper.selectVagueOrganizerByNameAndDescripeList(orgnizeName, descripe,page*size,size);
+        return Result.getResult(ExceptionEnum.OP_SUCCESS,organizers,total);
     }
     //查询所有Organizer
-    public List<Organizer> selectAllOrganizer(){
-        List<Organizer> organizer = organizerMapper.selectAllOrganizer();
-        return organizer;
+    public Result selectAllOrganizer(int page, Integer size){
+        List<Organizer> organizer = organizerMapper.selectAllOrganizerList(page*size,size);
+        int total =  organizerMapper.selectAllOrganizer().size();
+        return Result.getResult(ExceptionEnum.OP_SUCCESS,organizer,total);
     }
     //按照id修改Orgernizer
     public Result updateOrganizerById(Integer id,Integer delete,String name, String organizerdescripe){

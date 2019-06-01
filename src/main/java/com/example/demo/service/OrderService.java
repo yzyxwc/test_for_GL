@@ -26,8 +26,10 @@ public class OrderService {
     @Autowired
     CustomerOrderMapper customerOrderMapper;
     /*查询所有*/
-    public List<Order> getOderList(){
-        return orderMapper.getOrderList();
+    public Result getOderList(Integer size,Integer page){
+        List<Order> list = orderMapper.getOrderList(page*size,size);
+        int total = orderMapper.findAll().size();
+        return Result.getResult(ExceptionEnum.OP_SUCCESS,list,total);
     }
     /*插入单条*/
     public Result insertOrderSingle(String strDate, Integer ordertrip, Integer orderdedicatedline,
@@ -79,7 +81,7 @@ public class OrderService {
         return  Result.getResult(ExceptionEnum.OP_SUCCESS,order);
     }
 //模糊搜索
-    public Result getOrderVague(String strDate, String ordertrip, String orderdedicatedline, Integer orderpeoplecountint, String orgernizer) {
+    public Result getOrderVague(String strDate, String ordertrip, String orderdedicatedline, Integer orderpeoplecountint, String orgernizer,Integer page,Integer size) {
         String date = "%%";
         if(strDate != null && strDate != ""){
             date = strDate;
@@ -87,11 +89,12 @@ public class OrderService {
         String ordertripname = StrUtil.formateVager(ordertrip);
         String dedicatedlinename = StrUtil.formateVager(orderdedicatedline);
         String orgernizername = StrUtil.formateVager(orgernizer);
-        List<Order> list = orderMapper.getOrderVague(date,ordertripname,dedicatedlinename,orderpeoplecountint,orgernizername);
+        List<Order> list = orderMapper.getOrderVagueList(date,ordertripname,dedicatedlinename,orderpeoplecountint,orgernizername,size,page*size);
+        int total = orderMapper.getOrderVague(date,ordertripname,dedicatedlinename,orderpeoplecountint,orgernizername).size();
         if(list == null || list.size() == 0){
             return Result.getResult(ExceptionEnum.NO_DATA);
         }
-        return Result.getResult(ExceptionEnum.OP_SUCCESS,list);
+        return Result.getResult(ExceptionEnum.OP_SUCCESS,list,total);
     }
 //按照id进行删除
     public Result deleteOrderById(Integer id) {

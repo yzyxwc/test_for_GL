@@ -27,12 +27,17 @@ public class MiscellaneousController {
     }
     @PostMapping("/updateMiscellaneousById")
     @ApiOperation(value = "修改id对应的杂项",notes = "修改id对应的杂项")
-    public  Result updateMiscellaneousById(Integer id,Integer delete,String strcreatedate,String strcost,String strdescription){
-        return miscellaneousService.updateMiscellaneousById(id,delete,strcreatedate,strcost,strdescription);
+    public  Result updateMiscellaneousById(Integer miscellaneousid,Integer miscellaneousdelete,String createdate,String cost,String description){
+        return miscellaneousService.updateMiscellaneousById(miscellaneousid,miscellaneousdelete,createdate,cost,description);
     }
     @PostMapping("/insertMiscellaneousSingle")
     @ApiOperation(value = "插入杂项",notes = "插入杂项")
     public Result insertMiscellaneousSingle(String strcreatedate,String strcost,String strdescription){
         return miscellaneousService.insertMiscellaneousSingle(strcreatedate,strcost,strdescription);
+    }
+    @PostMapping("/findMiscellaneousVague")
+    @ApiOperation(value = "插入杂项",notes = "插入杂项")
+    public Result findMiscellaneousVague(@RequestParam(value = "month",required = false) String month){
+        return miscellaneousService.findMiscellaneousVague(month);
     }
 }
