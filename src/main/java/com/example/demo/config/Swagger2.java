@@ -33,13 +33,13 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title("Spring Boot Swagger2 构建RESTful API")
+                .title("账本测试系统1.0")
                 //条款地址
-                .termsOfServiceUrl("http://despairyoke.github.io/")
-                .contact("zwd")
+                .termsOfServiceUrl("120.79.224.49:8085/")
+                .contact("wc")
                 .version("1.0")
                 //描述
-                .description("API 描述")
+                .description("API 接口描述")
                 .build();
     }
 
